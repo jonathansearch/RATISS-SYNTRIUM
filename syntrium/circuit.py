@@ -62,14 +62,15 @@ class Circuit:
 def gain_circuit(f_hz: np.ndarray, c: Circuit) -> np.ndarray:
     """Chaîne complète DDS -> RC -> bobine : amplitude de courant I(f) en ampères.
 
-    V(f)  = v_alim * gain * |H_RC(f)|
-    Z(f)  = sqrt(R_s^2 + (L omega)^2)   (bobine réelle série)
-    + pont diviseur avec R_sortie : I = V * R_tot/(R_sortie+R_tot) / R_tot = V/(R_sortie+R_tot)
+    V(f)  = v_alim * gain * |H_RC(f)|          (source de Thévenin)
+    I(f)  = V(f) / |R_sortie + R_s + j L omega|   (somme COMPLEXE — v0.2 corrigée ;
+        la v0.1 additionnait les modules, sous-estimant I de ~12 % à 1 kHz).
     """
     h_rc = 1.0 / np.sqrt(1.0 + (f_hz / c.f_c_filtre) ** 2)
     v_sorte = c.v_alim * c.gain_mosfet * h_rc
-    z_bobine = np.sqrt(c.r_bobine ** 2 + (2.0 * math.pi * f_hz * c.l_bobine) ** 2)
-    return v_sorte / (c.r_sortie + z_bobine)
+    z_tot = np.sqrt((c.r_sortie + c.r_bobine) ** 2
+                    + (2.0 * math.pi * f_hz * c.l_bobine) ** 2)
+    return v_sorte / z_tot
 
 
 def champ_b(f_hz: np.ndarray, c: Circuit) -> np.ndarray:
