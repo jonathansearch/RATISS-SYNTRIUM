@@ -1,0 +1,16 @@
+{
+ "total_fichiers": 9,
+ "octets_total": 33504,
+ "compile_le": "2026-09-29T11:56:10.147057+00:00",
+ "fichiers": {
+  "BOM-BANC.md": "0854d9928eb48a2b648b015d939e32deeabb1b0b062856fa82bda720d0bc429b",
+  "DONNEES/bases_externes.json": "842a302b17afa1a8bdc31fa7c5d29828df01c1bd1c7e80847a4055374e1b0750",
+  "LICENSE": "da81290154612ad7f73dd9b417d9c97e811cde1a29d00065a6fa8ff3f353854c",
+  "PROTOCOLE.md": "34b2ada5bc36917c00dc810a2c51811e62d8df9ae1a03cb2d2c4680696a923b2",
+  "README.md": "5ef22c79033e49011ccac2de15b3a2fafc3d4ad0fc8a926ab7b67b0a7029c6be",
+  "outils/manifeste.py": "2288c6b7f8847d4f060dfa1de1440d2188d80e0840c5ff51cd3494ed2280c0ce",
+  "syntrium/__pycache__/physique.cpython-313.pyc": "ca69adb87333b19dcc5c299c189b87bedec91788de5d95c0f3674bbf1aec6177",
+  "syntrium/physique.py": "c4904e0106c67aeeef1d4743bea474b09e9fd2869cb088b27e211b3e938f3014",
+  "tests/test_physique.py": "8b10dffb387246c73a218b19ebfa484733e073eb6b136fea399867f52ae340ef"
+ }
+}

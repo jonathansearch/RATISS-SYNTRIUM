@@ -1,0 +1,53 @@
+{
+  "programme": "RATISS-SYNTRIUM v0 — bases de données réelles, interrogées en direct",
+  "date_capture": "2026-09-29",
+  "note": "Toutes les valeurs ci-dessous viennent de requêtes réelles exécutées le jour de la création du dépôt. Les URL sont publiques et rejouables par quiconque.",
+
+  "pubmed": {
+    "api": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
+    "requetes": [
+      {
+        "sujet": "PEMF × cicatrisation",
+        "term": "pulsed electromagnetic field AND wound healing",
+        "total_resultats": 242,
+        "pmids_exemples": ["42738823", "42675965", "42356396", "42270187", "42072201"]
+      },
+      {
+        "sujet": "champs électriques endogènes de blessure / électrotaxie",
+        "term": "endogenous electric field wound healing electrotaxis",
+        "total_resultats": 26,
+        "pmids_exemples": ["42676756", "42112432", "41332547", "41278198"]
+      }
+    ]
+  },
+
+  "openfda": {
+    "api": "https://api.fda.gov/device/510k.json",
+    "statut": "accès plein-texte fonctionnel depuis le sandbox ; requêtes ciblées par champ à refaire (syntaxe à régler)",
+    "requetes_prevues": [
+      "device_name:\"bone growth stimulator\"",
+      "device_name:\"osteogenesis stimulator\"",
+      "regulation_number:890.5450"
+    ],
+    "objectif": "extraire les K-numbers réels des stimulateurs osseux PEMF autorisés (EBI, Orthofix…) pour documenter leurs paramètres publiés"
+  },
+
+  "icnirp_2010": {
+    "source": "ICNIRP, Guidelines for limiting exposure to time-varying electric and magnetic fields (1 Hz to 100 kHz), Health Physics 99(6):818-836, 2010",
+    "restrictions_de_base_champ_interne_v_m": {
+      "phosphenes_CNS_10-25Hz_public": 0.010,
+      "phosphenes_CNS_10-25Hz_occupational": 0.050,
+      "nerve_stimulation_1kHz_public": 0.400,
+      "nerve_stimulation_400Hz-3kHz_occupational": 0.800,
+      "CNS_50Hz_public": 0.020,
+      "nonCNS_50Hz_public": 0.400
+    },
+    "usage_ratiss": "enveloppe de sécurité réelle du banc SYNTRIUM — remplace la « carte de cancer virtuel » (non simulable honnêtement)"
+  },
+
+  "ancre_litteraire": {
+    "pemf_bone_growth_usa_depuis": "1979 (autorisation FDA des stimulateurs osseux à champ pulsé — usage clinique établi, paramètres publiés par fabricant)",
+    "champs_endogenes_blessure": "les blessures créent des champs électriques transcutanés qui orientent la migration cellulaire (électrotaxie) — domaine établi, voir requête PubMed ci-dessus",
+    "bioelectricite": "domaine de recherche actif (bioelectricity / electroceuticals) — revues disponibles via PubMed"
+  }
+}
