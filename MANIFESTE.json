@@ -1,16 +1,25 @@
 {
- "total_fichiers": 9,
- "octets_total": 33504,
- "compile_le": "2026-09-29T11:56:10.147057+00:00",
+ "total_fichiers": 18,
+ "octets_total": 998678,
+ "compile_le": "2026-09-29T12:07:50.513318+00:00",
  "fichiers": {
   "BOM-BANC.md": "0854d9928eb48a2b648b015d939e32deeabb1b0b062856fa82bda720d0bc429b",
   "DONNEES/bases_externes.json": "842a302b17afa1a8bdc31fa7c5d29828df01c1bd1c7e80847a4055374e1b0750",
   "LICENSE": "da81290154612ad7f73dd9b417d9c97e811cde1a29d00065a6fa8ff3f353854c",
   "PROTOCOLE.md": "34b2ada5bc36917c00dc810a2c51811e62d8df9ae1a03cb2d2c4680696a923b2",
-  "README.md": "5ef22c79033e49011ccac2de15b3a2fafc3d4ad0fc8a926ab7b67b0a7029c6be",
+  "README.md": "252685ce2692782c9c762bd3cd173311b60176317f21da8c6197e51c7b542b7f",
+  "figures/fig_A_circuit.png": "030719475d9f661f16afc0ccd532d4eebe300ba119564b26ecdcdb66dcc05cc6",
+  "figures/fig_B_fenetres.png": "061c0b8aaa77920b052ada78f7bf02594b90ae74e23df8f6dc6ac16bb6644a0c",
+  "figures/fig_C_low_freq.png": "5a504f432ded74c2edd351253ad9a651814997e098e64bae6c63f660677fbacb",
+  "figures/fig_D_schema.png": "4395974d620f584fb15bab88bc6e1a0b6990c152cbb84de7fca430742aa2a4bd",
+  "figures/fig_E_bande_clinique.png": "a451b9cfed04b53a1506152a78b1aafab0164699d326f1eabd3b99271d95cb7c",
   "outils/manifeste.py": "2288c6b7f8847d4f060dfa1de1440d2188d80e0840c5ff51cd3494ed2280c0ce",
-  "syntrium/__pycache__/physique.cpython-313.pyc": "ca69adb87333b19dcc5c299c189b87bedec91788de5d95c0f3674bbf1aec6177",
+  "syntrium/__pycache__/circuit.cpython-313.pyc": "2a288851ba2924c336f565b0a5fd2e3be919f84b5cc5ea754684c7ef5f6555ad",
+  "syntrium/__pycache__/physique.cpython-313.pyc": "aeceb4492b08781683ca6e41433ca027f0bb5b409401de662d7a4c930b5b9c39",
+  "syntrium/circuit.py": "70e2935c39b227906d2d2ab6c2d7f07f43a35844d94b7f55458b5ba575c093b8",
+  "syntrium/figures.py": "fe80ce69883968ab0bc891e71fca01cf3d9f455aced29773faf53fe39024ab91",
   "syntrium/physique.py": "c4904e0106c67aeeef1d4743bea474b09e9fd2869cb088b27e211b3e938f3014",
+  "tests/test_circuit.py": "db99dd25a09fc4b8504abb7107df640a1910f132aa728b25abd7d1b361f6b1d1",
   "tests/test_physique.py": "8b10dffb387246c73a218b19ebfa484733e073eb6b136fea399867f52ae340ef"
  }
 }

@@ -1,8 +1,43 @@
 # ⚡ RATISS-SYNTRIUM — L'émetteur biomimétique à faible voltage
 
-**Programme RATISS-BIOELECTRO · Bioélectricité externe · v0.0-bases**
+**Programme RATISS-BIOELECTRO · Bioélectricité externe · v0.1-in-silico**
 
 *Par **RATISS Labs** — Jonathan Evina · Yaoundé · MIT*
+
+> **v0.1 (29/09/2026) : la simulation complète tourne.** Circuit émetteur modélisé, balayage
+> spectral 10 Hz → 100 kHz, fenêtres ICNIRP, comparaison aux niveaux cliniques — **5 figures,
+> 11 tests verts, graine 20260929, zéro matériel requis.** Le banc Arduino viendra APRÈS,
+> et il aura déjà son jumeau numérique. 🧮
+
+---
+
+## 🖥️ v0.1 — la campagne in silico (ce que le simulateur montre déjà)
+
+Le circuit modélisé (celui que le chef remontera en dur plus tard) :
+
+```
+AD9833 (sinus f) → filtre RC passe-bas (fc ≈ 159 Hz) → MOSFET (gain 0,9) → bobine 200 sp, 2,2 mH
+```
+
+**Les cinq figures** (toutes régénérables par `python3 syntrium/figures.py`, graine 20260929) :
+
+| Figure | Ce qu'elle montre |
+|---|---|
+| `fig_A_circuit.png` | réponse du circuit : courant bobine et champ B vs fréquence (le filtre 159 Hz laisse passer l'ELF, coupe le résidu DDS) |
+| `fig_B_fenetres.png` | **la carte des fenêtres** : E induit vs limites ICNIRP, zones verte/ambre/rouge + ratio limite en % |
+| `fig_C_low_freq.png` | zoom 10 Hz – 2 kHz : la fenêtre d'exploitation honnête |
+| `fig_D_schema.png` | le schéma du circuit simulé — pour comprendre avant de souder |
+| `fig_E_bande_clinique.png` | **LA figure clé** : le banc 5 V face à la bande clinique PEMF documentée |
+
+**Les verdicts chiffrés de la simulation (🧮) :**
+
+- **@15 Hz (bande PEMF os)** : I ≈ 80 mA, **B ≈ 335 µT**, E induit ≈ 2,5 mV/m — **6 % de la limite ICNIRP publique**. Zone verte totale.
+- **@1 kHz** : I ≈ 10,9 mA (le filtre commence à couper), B ≈ 45 µT, E ≈ 7,2 mV/m — **1,8 % de la limite**.
+- **Sur tout le balayage 10 Hz – 100 kHz : le banc 5 V reste sous 30 % d'ICNIRP — sûr par construction.** Et ΔT < 10⁻⁹ K : strictement rien en thermique.
+- **Le fossé honnête (fig_E)** : la bande clinique PEMF os documentée (~0,5–2 mT, 15–75 Hz — précisée en phase 4) vit **≈ 3 à 30× au-dessus** de ce qu'un montage 5 V / 200 spires produit. Pour combler le fossé : plus de spires, plus de courant (24 V), ou le calcul du meilleur compromis — **c'est le prochain chantier du simulateur** : cartographier les solutions (spires × courant × tension) pour atteindre 0,5–2 mT en restant conforme.
+
+**En une phrase : le simulateur dit déjà trois choses — le banc 5 V est intrinsèquement sûr,
+il est ~3× sous le niveau clinique à 15 Hz, et le chemin pour combler l'écart se calcule.**
 
 ---
 
@@ -84,11 +119,15 @@ RATISS-SYNTRIUM/
 ├── DONNEES/
 │   └── bases_externes.json  ← snapshots réels : PubMed, openFDA, ICNIRP (datés, URL)
 ├── syntrium/
-│   └── physique.py          ← Faraday, Schwan, SAR + limites ICNIRP
+│   ├── physique.py          ← Faraday, Schwan, SAR + limites ICNIRP
+│   ├── circuit.py           ← le circuit émetteur simulé (DDS→RC→MOSFET→bobine)
+│   └── figures.py           ← les 5 figures (300 dpi, depuis le calcul)
 ├── tests/
-│   └── test_physique.py
+│   ├── test_physique.py
+│   └── test_circuit.py
 ├── outils/
 │   └── manifeste.py         ← le sceau SHA-256 du labo
+├── figures/                 ← fig_A..fig_E (les sorties de la simulation)
 ├── MANIFESTE.json
 └── LICENSE                  ← MIT
 ```
