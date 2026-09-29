@@ -1,13 +1,13 @@
 # ⚡ RATISS-SYNTRIUM — L'émetteur biomimétique à faible voltage
 
-**Programme RATISS-BIOELECTRO · Bioélectricité externe · v0.1-in-silico**
+**Programme RATISS-BIOELECTRO · Bioélectricité externe · v0.2-in-silico**
 
 *Par **RATISS Labs** — Jonathan Evina · Yaoundé · MIT*
 
-> **v0.1 (29/09/2026) : la simulation complète tourne.** Circuit émetteur modélisé, balayage
-> spectral 10 Hz → 100 kHz, fenêtres ICNIRP, comparaison aux niveaux cliniques — **5 figures,
-> 11 tests verts, graine 20260929, zéro matériel requis.** Le banc Arduino viendra APRÈS,
-> et il aura déjà son jumeau numérique. 🧮
+> **v0.2 (29/09/2026) : TOUTE la validation in silico est livrée.** Circuit, oscilloscope
+> virtuel, cartographie des designs, fantôme gélose (équation de la chaleur) — **8 figures,
+> 29 tests verts, graine 20260929, zéro matériel requis.** Le banc Arduino viendra APRÈS,
+> et il aura déjà son jumeau numérique complet. 🧮
 
 ---
 
@@ -32,12 +32,51 @@ AD9833 (sinus f) → filtre RC passe-bas (fc ≈ 159 Hz) → MOSFET (gain 0,9) �
 **Les verdicts chiffrés de la simulation (🧮) :**
 
 - **@15 Hz (bande PEMF os)** : I ≈ 80 mA, **B ≈ 335 µT**, E induit ≈ 2,5 mV/m — **6 % de la limite ICNIRP publique**. Zone verte totale.
-- **@1 kHz** : I ≈ 10,9 mA (le filtre commence à couper), B ≈ 45 µT, E ≈ 7,2 mV/m — **1,8 % de la limite**.
+- **@1 kHz** : I ≈ 12,3 mA, B ≈ 51 µT, E ≈ 8,1 mV/m — **2,0 % de la limite**. *(chiffres v0.2 : la v0.1 additionnait |Z| et R_out au lieu de la somme complexe — sous-estimation de 12 %, corrigée et vérifiée par le domaine temporel.)*
 - **Sur tout le balayage 10 Hz – 100 kHz : le banc 5 V reste sous 30 % d'ICNIRP — sûr par construction.** Et ΔT < 10⁻⁹ K : strictement rien en thermique.
-- **Le fossé honnête (fig_E)** : la bande clinique PEMF os documentée (~0,5–2 mT, 15–75 Hz — précisée en phase 4) vit **≈ 3 à 30× au-dessus** de ce qu'un montage 5 V / 200 spires produit. Pour combler le fossé : plus de spires, plus de courant (24 V), ou le calcul du meilleur compromis — **c'est le prochain chantier du simulateur** : cartographier les solutions (spires × courant × tension) pour atteindre 0,5–2 mT en restant conforme.
+- *(Le « fossé de 3× » annoncé en v0.1 avec le fil 0,4 mm a été **balayé par la cartographie v0.2a** : c'était un artefact du fil trop fin — voir ci-dessous.)*
 
-**En une phrase : le simulateur dit déjà trois choses — le banc 5 V est intrinsèquement sûr,
-il est ~3× sous le niveau clinique à 15 Hz, et le chemin pour combler l'écart se calcule.**
+---
+
+## 🗺️ v0.2 — les trois chantiers de validation in silico (figs F, G, H)
+
+### (a) Cartographie des designs — `syntrium/design.py` + `fig_F_designs.png`
+
+**705 configurations scannées** (50–1200 spires × 5 diamètres de fil × 5/12/24 V), critères : dans la bande 0,5–2 mT · conforme ICNIRP (15 **et** 75 Hz) · bobine froide (P ≤ 4 W).
+
+> 💥 **Résultat majeur : le 5 V ATTEINT la bande clinique.** 275 spires en fil 0,8 mm →
+> **B = 0,50 mT @15 Hz, I = 87 mA, ratio ICNIRP 13 %, P = 0,01 W.** Le « fossé de 3× »
+> de la v0.1 était l'artefact du fil 0,4 mm (trop résistant : 21 Ω). **308 designs sont
+> faisables, dont 105 en 5 V** — le banc souverain (USB power bank) est LA piste principale.
+> *Le chef remontera la bobine en 0,8 mm, pas en 0,4 : c'est écrit dans le simulateur.*
+
+### (b) Oscilloscope virtuel — `syntrium/onde.py` + `fig_G_oscillo.png`
+
+La chaîne complète résolue **dans le temps** : sinus DDS → quantification DAC 10 bits (pas de 4,4 mV) → filtre RC (FFT) → bobine → B(t), E(t).
+
+- **Cohérence temps/fréquence vérifiée à < 0,1 %** : pic B(t) @15 Hz = 335,1 µT ↔ 335 µT fréquentiel.
+- **Phase théorique confirmée** : −5,6° @15 Hz (quasi transparent) · **−94,8° @1 kHz** (le filtre domine).
+- **THD (fenêtre de Hann)** : 0,001 % @15 Hz · 0,01 % → 0,002 % @1 kHz (le filtre nettoie 5× les harmoniques qui, eux, dépassent fc).
+- **La voie n°4 de la figure est le vrai enseignement** : à 1 kHz, le filtre 159 Hz **écrase le champ de 6,5×** et le déphase — c'est LUI qui sculpte le spectre émis, pas la bobine.
+
+### (c) Fantôme gélose simulé — `syntrium/gel.py` + `fig_H_fantome.png` + `resultats/fantome.json`
+
+Le disque de gel de la phase 3, modélisé **avant** d'être coulé : E(r) = π·f·r·B (nul au centre, max au bord), dépôt p = σE², **équation de la chaleur résolue en FTCS** (161 points, bord convectif de Robin, 10 min de séance, pire cas 75 Hz).
+
+| Design | ΔT max du fantôme sur 600 s |
+|---|---|
+| banc 5 V (0,335 mT) | **2,5 × 10⁻⁹ K** |
+| clinique basse (0,5 mT) | 5,6 × 10⁻⁹ K |
+| clinique médiane (1 mT) | 2,3 × 10⁻⁸ K |
+| clinique haute (2 mT) | **9,0 × 10⁻⁸ K** |
+
+> Même au design clinique haut, **le fantôme ne bouge pas d'un dix-millionième de degré**.
+> L'effet de SYNTRIUM sera informationnel ou ne sera pas — le simulateur le répète
+> à chaque couche de la pile.
+
+**En une phrase : la validation in silico est COMPLETE — le design optimal est connu
+(275 sp, 0,8 mm, 5 V), la forme d'onde est propre et prévisible, et le fantôme est
+thermiquement invisible. La phase matérielle a maintenant son jumeau numérique.**
 
 ---
 

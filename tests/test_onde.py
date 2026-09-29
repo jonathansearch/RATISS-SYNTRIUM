@@ -49,3 +49,10 @@ def test_e_induit_taux_zero():
     r = chaine(15.0)
     attendu = math.pi * 15.0 * 0.05 * r["B"]
     assert float(np.max(np.abs(r["E"] - attendu))) < 1e-15
+
+
+if __name__ == "__main__":
+    for nom, fn in sorted({k: v for k, v in globals().items() if k.startswith("test_")}.items()):
+        fn()
+        print(f"OK {nom}")
+    print("TOUS LES TESTS PASSENT")

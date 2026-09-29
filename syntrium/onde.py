@@ -42,11 +42,11 @@ def chaine(f: float, duree_cycles: int = 12, c: Circuit | None = None,
     v_ideal = c.v_alim * c.gain_mosfet * np.sin(2.0 * math.pi * f * t)
 
     # 2) quantification DAC 10 bits (pleine échelle 0..V·gain, offset milieu)
-    if quantifier:
-        q = (c.v_alim * c.gain_mosfet) / (2 ** BITS_DAC)
+    q = (c.v_alim * c.gain_mosfet) / (2 ** BITS_DAC)
+    if quantifier and q > 0.0:
         v_dac = np.round(v_ideal / q) * q
     else:
-        v_dac = v_ideal.copy()
+        v_dac = v_ideal.copy()   # échelle nulle (témoin) ou quantification désactivée
 
     # 3) filtre RC (réponse complexe, appliquée dans le domaine fréquentiel)
     spec = np.fft.rfft(v_dac)
